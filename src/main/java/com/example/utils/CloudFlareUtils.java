@@ -170,15 +170,15 @@ public class CloudFlareUtils {
 
         HttpResponse creation = send(req);
 
-        HttpRequestEntity HttpRequestEntity = new HttpRequestEntity();
+        HttpRequestEntity httpRequestEntity = new HttpRequestEntity();
 
         try {
-            HttpRequestEntity = JSONObject.parseObject(creation.body(), HttpRequestEntity.class);
+            httpRequestEntity = JSONObject.parseObject(creation.body(), HttpRequestEntity.class);
         } catch (HttpException e) {
             e.printStackTrace();
         }
 
-        return HttpRequestEntity;
+        return httpRequestEntity;
 
     }
 

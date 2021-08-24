@@ -1,17 +1,19 @@
 package com.example.utils;
 
 
-import cn.hutool.aop.ProxyUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.example.config.ProxyUrlConfig;
 import com.example.entity.*;
+import com.example.entity.cloudflare.CloudFlareConfig;
+import com.example.entity.cloudflare.CloudFlareRequestBody;
+import com.example.entity.cloudflare.CloudFlareResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -45,8 +47,8 @@ public class CloudFlareUtils {
      * @param params
      * @return
      */
-    public static HttpRequestEntity sendPostForm(String url, HttpParams params) {
-        return creation(CloudFlareParam.POST, url, params, null, true);
+    public static CloudFlareResponseBody sendPostForm(String url, HttpParams params) {
+        return creation(CloudFlareConfig.POST, url, params, null, true);
     }
 
     /**
@@ -57,8 +59,8 @@ public class CloudFlareUtils {
      * @param headers
      * @return
      */
-    public static HttpRequestEntity sendPostForm(String url, HttpParams params, HttpHeader headers) {
-        return creation(CloudFlareParam.POST, url, params, headers, true);
+    public static CloudFlareResponseBody sendPostForm(String url, HttpParams params, HttpHeader headers) {
+        return creation(CloudFlareConfig.POST, url, params, headers, true);
     }
 
     /**
@@ -68,8 +70,8 @@ public class CloudFlareUtils {
      * @param body
      * @return
      */
-    public static HttpRequestEntity sendPostJson(String url, HttpParams body) {
-        return creation(CloudFlareParam.POST, url, body, null, false);
+    public static CloudFlareResponseBody sendPostJson(String url, HttpParams body) {
+        return creation(CloudFlareConfig.POST, url, body, null, false);
     }
 
     /**
@@ -80,8 +82,8 @@ public class CloudFlareUtils {
      * @param headers
      * @return
      */
-    public static HttpRequestEntity sendPostJson(String url, HttpParams body, HttpHeader headers) {
-        return creation(CloudFlareParam.POST, url, body, headers, false);
+    public static CloudFlareResponseBody sendPostJson(String url, HttpParams body, HttpHeader headers) {
+        return creation(CloudFlareConfig.POST, url, body, headers, false);
     }
 
 //---------------------------------------------------get----------------------------------------------------
@@ -90,8 +92,8 @@ public class CloudFlareUtils {
      * @param url
      * @return
      */
-    public static HttpRequestEntity sendGet(String url) {
-        return creation(CloudFlareParam.GET, url, null, null, true);
+    public static CloudFlareResponseBody sendGet(String url) {
+        return creation(CloudFlareConfig.GET, url, null, null, true);
     }
 
     /**
@@ -101,8 +103,8 @@ public class CloudFlareUtils {
      * @param header
      * @return
      */
-    public static HttpRequestEntity sendGet(String url, HttpHeader header) {
-        return creation(CloudFlareParam.GET, url, null, header, true);
+    public static CloudFlareResponseBody sendGet(String url, HttpHeader header) {
+        return creation(CloudFlareConfig.GET, url, null, header, true);
     }
 
 
@@ -113,8 +115,8 @@ public class CloudFlareUtils {
      * @param param
      * @return
      */
-    public static HttpRequestEntity sendGetForm(String url, HttpParams param) {
-        return creation(CloudFlareParam.GET, url, param, null, true);
+    public static CloudFlareResponseBody sendGetForm(String url, HttpParams param) {
+        return creation(CloudFlareConfig.GET, url, param, null, true);
     }
 
     /**
@@ -125,8 +127,8 @@ public class CloudFlareUtils {
      * @param header
      * @return
      */
-    public static HttpRequestEntity sendGetForm(String url, HttpParams param, HttpHeader header) {
-        return creation(CloudFlareParam.GET, url, param, header, true);
+    public static CloudFlareResponseBody sendGetForm(String url, HttpParams param, HttpHeader header) {
+        return creation(CloudFlareConfig.GET, url, param, header, true);
     }
 
 
@@ -138,15 +140,15 @@ public class CloudFlareUtils {
      * @param params  参数
      * @param headers 请求头
      * @param isForm  是否是form请求
-     * @return HttpRequestEntity
+     * @return CloudFlareResponseBody
      */
-    public static HttpRequestEntity creation(String method, String url, HttpParams params, HttpHeader headers, boolean isForm) {
+    public static CloudFlareResponseBody creation(String method, String url, HttpParams params, HttpHeader headers, boolean isForm) {
 
         log.info("请求地址:{}", url);
         log.info("请求参数:{}", JSONObject.toJSONString(params));
         log.info("请求响应:{}", JSONObject.toJSONString(headers));
 
-        CloudFlareParam cloudFlare = new CloudFlareParam() {{
+        CloudFlareRequestBody cloudFlare = new CloudFlareRequestBody() {{
             setMethod(method);
             setUrl(url);
             setBody(params);
@@ -156,7 +158,7 @@ public class CloudFlareUtils {
             headers = new HttpHeader();
         }
         if (!isForm) {
-            headers.put("content-type", CloudFlareParam.JSON);
+            headers.put("content-type", CloudFlareConfig.JSON);
         }
         // TODO: 2021/8/23 设置 User-Agent
 
@@ -170,10 +172,10 @@ public class CloudFlareUtils {
 
         HttpResponse creation = send(req);
 
-        HttpRequestEntity httpRequestEntity = new HttpRequestEntity();
+        CloudFlareResponseBody httpRequestEntity = new CloudFlareResponseBody();
 
         try {
-            httpRequestEntity = JSONObject.parseObject(creation.body(), HttpRequestEntity.class);
+            httpRequestEntity = JSONObject.parseObject(creation.body(), CloudFlareResponseBody.class);
         } catch (HttpException e) {
             e.printStackTrace();
         }

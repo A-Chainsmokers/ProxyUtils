@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.entity.cloudflare;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class HttpRequestEntity {
+public class CloudFlareResponseBody {
 
     private String cookie;
 

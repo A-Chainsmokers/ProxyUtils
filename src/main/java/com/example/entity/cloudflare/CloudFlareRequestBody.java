@@ -1,5 +1,7 @@
-package com.example.entity;
+package com.example.entity.cloudflare;
 
+import com.example.entity.HttpHeader;
+import com.example.entity.HttpParams;
 import lombok.Data;
 
 
@@ -9,17 +11,7 @@ import lombok.Data;
  * @date 2020/12/10 15:51
  */
 @Data
-public class CloudFlareParam {
-
-    public final static String POST = "POST";
-
-    public final static String GET = "GET";
-
-    public final static String FROM = "application/x-www-form-urlencoded; charset=UTF-8";
-
-    public final static String JSON = "application/json; charset=UTF-8";
-
-    public final static String COOKIE = "cookie";
+public class CloudFlareRequestBody {
 
 
     /**

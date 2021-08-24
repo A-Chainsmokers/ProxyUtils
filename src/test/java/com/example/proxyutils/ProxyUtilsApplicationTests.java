@@ -1,7 +1,7 @@
 package com.example.proxyutils;
 
-import com.example.entity.HttpRequestEntity;
-import com.example.utils.CloudFlareUtils;
+import com.example.entity.restbin.RestBinRequestBody;
+import com.example.utils.RestBinUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -11,10 +11,9 @@ class ProxyUtilsApplicationTests {
     @Test
     void contextLoads() {
 
-        HttpRequestEntity httpRequestEntity = CloudFlareUtils.sendGet("https://reqbin.com/");
+        RestBinRequestBody restBinRequestBody = RestBinUtils.sendGet("https://lncn.org/");
 
-        System.out.println(httpRequestEntity.getEntity());
-
+        System.out.println(restBinRequestBody.getContent());
 
     }
 

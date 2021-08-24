@@ -8,6 +8,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.example.entity.*;
+import com.example.entity.cloudflare.CloudFlareResponseBody;
+import com.example.entity.hoppscotch.HoppScotchConfig;
+import com.example.entity.hoppscotch.HoppScotchRequestBody;
+import com.example.entity.hoppscotch.HoppScotchResponseBody;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.Charset;
@@ -20,6 +24,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 public class HoppScotchUtil {
+
     private static final String URL = "https://proxy.hoppscotch.io/";
 
 
@@ -29,7 +34,7 @@ public class HoppScotchUtil {
      * @param url 请求地址
      * @return
      */
-    public static HttpResponseBody sendGet(String url) {
+    public static HoppScotchResponseBody sendGet(String url) {
         return sendGet(url, null, null, StandardCharsets.UTF_8);
     }
 
@@ -40,7 +45,7 @@ public class HoppScotchUtil {
      * @param charset 响应字节码
      * @return
      */
-    public static HttpResponseBody sendGet(String url, Charset charset) {
+    public static HoppScotchResponseBody sendGet(String url, Charset charset) {
         return sendGet(url, null, null, charset);
     }
 
@@ -51,7 +56,7 @@ public class HoppScotchUtil {
      * @param httpHeader header
      * @return
      */
-    public static HttpResponseBody sendGet(String url, HttpHeader httpHeader) {
+    public static HoppScotchResponseBody sendGet(String url, HttpHeader httpHeader) {
 
         return sendGet(url, null, httpHeader);
     }
@@ -64,7 +69,7 @@ public class HoppScotchUtil {
      * @param charset    响应字节码
      * @return
      */
-    public static HttpResponseBody sendGet(String url, HttpHeader httpHeader, Charset charset) {
+    public static HoppScotchResponseBody sendGet(String url, HttpHeader httpHeader, Charset charset) {
 
         return sendGet(url, null, httpHeader, charset);
     }
@@ -76,7 +81,7 @@ public class HoppScotchUtil {
      * @param httpParams 请求参数 param
      * @return
      */
-    public static HttpResponseBody sendGet(String url, HttpParams httpParams) {
+    public static HoppScotchResponseBody sendGet(String url, HttpParams httpParams) {
 
         return sendGet(url, httpParams, null, StandardCharsets.UTF_8);
     }
@@ -89,7 +94,7 @@ public class HoppScotchUtil {
      * @param charset    响应字节码
      * @return
      */
-    public static HttpResponseBody sendGet(String url, HttpParams httpParams, Charset charset) {
+    public static HoppScotchResponseBody sendGet(String url, HttpParams httpParams, Charset charset) {
 
         return sendGet(url, httpParams, null, charset);
     }
@@ -103,7 +108,7 @@ public class HoppScotchUtil {
      * @param httpParams 请求参数 param
      * @return
      */
-    public static HttpResponseBody sendGet(String url, HttpParams httpParams, HttpHeader httpHeader) {
+    public static HoppScotchResponseBody sendGet(String url, HttpParams httpParams, HttpHeader httpHeader) {
 
         return sendGet(url, httpParams, httpHeader, StandardCharsets.UTF_8);
     }
@@ -117,9 +122,9 @@ public class HoppScotchUtil {
      * @param charset    响应字节码
      * @return
      */
-    public static HttpResponseBody sendGet(String url, HttpParams httpParams, HttpHeader httpHeader, Charset charset) {
+    public static HoppScotchResponseBody sendGet(String url, HttpParams httpParams, HttpHeader httpHeader, Charset charset) {
 
-        HttpRequestBody body = new HttpRequestBody();
+        HoppScotchRequestBody body = new HoppScotchRequestBody();
 
         body.setUrl(url);
 
@@ -144,7 +149,7 @@ public class HoppScotchUtil {
      * @param httpParams 请求参数 param
      * @return result
      */
-    public static HttpResponseBody sendPostJson(String url, HttpParams httpParams) {
+    public static HoppScotchResponseBody sendPostJson(String url, HttpParams httpParams) {
 
 
         return sendPostJson(url, httpParams, null, StandardCharsets.UTF_8);
@@ -158,7 +163,7 @@ public class HoppScotchUtil {
      * @param charset    响应字节码
      * @return result
      */
-    public static HttpResponseBody sendPostJson(String url, HttpParams httpParams, Charset charset) {
+    public static HoppScotchResponseBody sendPostJson(String url, HttpParams httpParams, Charset charset) {
 
         return sendPostJson(url, httpParams, null, charset);
     }
@@ -173,7 +178,7 @@ public class HoppScotchUtil {
      * @param httpHeader header
      * @return result
      */
-    public static HttpResponseBody sendPostJson(String url, HttpParams httpParams, HttpHeader httpHeader) {
+    public static HoppScotchResponseBody sendPostJson(String url, HttpParams httpParams, HttpHeader httpHeader) {
 
         return sendPostJson(url, httpParams, httpHeader, StandardCharsets.UTF_8);
     }
@@ -188,13 +193,13 @@ public class HoppScotchUtil {
      * @param charset    响应字节码
      * @return result
      */
-    public static HttpResponseBody sendPostJson(String url, HttpParams httpParams, HttpHeader httpHeader, Charset charset) {
+    public static HoppScotchResponseBody sendPostJson(String url, HttpParams httpParams, HttpHeader httpHeader, Charset charset) {
 
-        HttpRequestBody body = new HttpRequestBody();
+        HoppScotchRequestBody body = new HoppScotchRequestBody();
 
         body.setUrl(url);
 
-        body.setMethod(HttpRequestBody.POST);
+        body.setMethod(HoppScotchConfig.POST);
 
         if (CollectionUtil.isNotEmpty(httpParams)) {
             body.setData(JSON.toJSONString(httpParams));
@@ -204,7 +209,7 @@ public class HoppScotchUtil {
             httpHeader = new HttpHeader();
         }
 
-        httpHeader.put("Content-Type", HttpRequestBody.JSON);
+        httpHeader.put("Content-Type", HoppScotchConfig.JSON);
 
         body.setHeaders(httpHeader);
 
@@ -219,7 +224,7 @@ public class HoppScotchUtil {
      * @param url 请求地址
      * @return result
      */
-    public static HttpResponseBody sendPost(String url) {
+    public static HoppScotchResponseBody sendPost(String url) {
         return sendPostForm(url, null, null, StandardCharsets.UTF_8);
     }
 
@@ -231,7 +236,7 @@ public class HoppScotchUtil {
      * @param charset 响应字节码
      * @return result
      */
-    public static HttpResponseBody sendPost(String url, Charset charset) {
+    public static HoppScotchResponseBody sendPost(String url, Charset charset) {
         return sendPostForm(url, null, null, charset);
     }
 
@@ -244,7 +249,7 @@ public class HoppScotchUtil {
      * @param httpHeader header
      * @return result
      */
-    public static HttpResponseBody sendPostForm(String url, HttpHeader httpHeader) {
+    public static HoppScotchResponseBody sendPostForm(String url, HttpHeader httpHeader) {
         return sendPostForm(url, null, httpHeader);
     }
 
@@ -256,7 +261,7 @@ public class HoppScotchUtil {
      * @param charset    响应字节码
      * @return result
      */
-    public static HttpResponseBody sendPostForm(String url, HttpHeader httpHeader, Charset charset) {
+    public static HoppScotchResponseBody sendPostForm(String url, HttpHeader httpHeader, Charset charset) {
         return sendPostForm(url, null, httpHeader, charset);
     }
 
@@ -269,7 +274,7 @@ public class HoppScotchUtil {
      * @param httpParams 请求参数 param
      * @return result
      */
-    public static HttpResponseBody sendPostForm(String url, HttpParams httpParams) {
+    public static HoppScotchResponseBody sendPostForm(String url, HttpParams httpParams) {
         return sendPostForm(url, httpParams, StandardCharsets.UTF_8);
     }
 
@@ -281,7 +286,7 @@ public class HoppScotchUtil {
      * @param charset    响应字节码
      * @return result
      */
-    public static HttpResponseBody sendPostForm(String url, HttpParams httpParams, Charset charset) {
+    public static HoppScotchResponseBody sendPostForm(String url, HttpParams httpParams, Charset charset) {
         return sendPostForm(url, httpParams, null, charset);
     }
 
@@ -295,7 +300,7 @@ public class HoppScotchUtil {
      * @param httpHeader header
      * @return result
      */
-    public static HttpResponseBody sendPostForm(String url, HttpParams httpParams, HttpHeader httpHeader) {
+    public static HoppScotchResponseBody sendPostForm(String url, HttpParams httpParams, HttpHeader httpHeader) {
 
         return sendPostForm(url, httpParams, httpHeader, StandardCharsets.UTF_8);
     }
@@ -309,19 +314,19 @@ public class HoppScotchUtil {
      * @param charset    响应字节码
      * @return result
      */
-    public static HttpResponseBody sendPostForm(String url, HttpParams httpParams, HttpHeader httpHeader, Charset charset) {
+    public static HoppScotchResponseBody sendPostForm(String url, HttpParams httpParams, HttpHeader httpHeader, Charset charset) {
 
-        HttpRequestBody body = new HttpRequestBody();
+        HoppScotchRequestBody body = new HoppScotchRequestBody();
 
         body.setUrl(url);
 
-        body.setMethod(HttpRequestBody.POST);
+        body.setMethod(HoppScotchConfig.POST);
 
         if (CollectionUtil.isEmpty(httpHeader)) {
             httpHeader = new HttpHeader();
         }
 
-        httpHeader.put("Content-Type", HttpRequestBody.FORM);
+        httpHeader.put("Content-Type", HoppScotchConfig.FORM);
 
         body.setHeaders(httpHeader);
 
@@ -339,10 +344,9 @@ public class HoppScotchUtil {
      * @param charset 响应字节码
      * @return
      */
-    private static HttpResponseBody getHttpResponseBody(HttpRequestBody param, Charset charset) {
+    private static HoppScotchResponseBody getHttpResponseBody(HoppScotchRequestBody param, Charset charset) {
 
         log.info("hoppscotch参数: {}", param);
-
 
         HttpHeader header = new HttpHeader() {{
             put("origin", "https://hoppscotch.io");
@@ -352,18 +356,18 @@ public class HoppScotchUtil {
 
         String json = JSONObject.toJSONString(param, SerializerFeature.WriteMapNullValue);
 
-        HttpRequestEntity httpEntity = CloudFlareUtils.sendPostJson(URL, JSON.parseObject(json, HttpParams.class), header);
+        CloudFlareResponseBody httpEntity = CloudFlareUtils.sendPostJson(URL, JSON.parseObject(json, HttpParams.class), header);
 
-        HttpResponseBody httpResponseBody = JSONObject.parseObject(httpEntity.getEntity(), HttpResponseBody.class);
+        HoppScotchResponseBody hoppScotchResponseBody = JSONObject.parseObject(httpEntity.getEntity(), HoppScotchResponseBody.class);
 
-        String data = httpResponseBody.getData();
+        String data = hoppScotchResponseBody.getData();
 
         if (StrUtil.isNotBlank(data)) {
             log.info("Base64加密结果: {}", data);
-            httpResponseBody.setData(Base64Decoder.decodeStr(data, charset));
+            hoppScotchResponseBody.setData(Base64Decoder.decodeStr(data, charset));
         }
 
-        return httpResponseBody;
+        return hoppScotchResponseBody;
     }
 
 
